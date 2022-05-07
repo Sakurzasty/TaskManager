@@ -16,22 +16,15 @@ class TaskAdapter(private val database: AppDatabase) : RecyclerView.Adapter<Task
     private val handler = HandlerCompat.createAsync(Looper.getMainLooper())
     private var tasks = mutableListOf<Task>()
     private var filteredData = mutableListOf<Task>()
-    private lateinit var mClickListener: onClickListener
-    private lateinit var mClickLongListener: onClickLongListener
+    private lateinit var listener: onClickListener
 
     interface onClickListener{
         fun onItemClick(position : Int)
-    }
-    interface onClickLongListener{
         fun onItemLongClick(position: Int)
     }
 
     fun setOnItemClickListener(listener: onClickListener){
-        mClickListener = listener
-    }
-
-    fun setOnItemLongClickListner(listener: onClickLongListener){
-        mClickLongListener = listener
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -40,7 +33,7 @@ class TaskAdapter(private val database: AppDatabase) : RecyclerView.Adapter<Task
            parent,
            false
        )
-        return TaskViewHolder(binding, mClickListener, mClickLongListener)
+        return TaskViewHolder(binding, listener)
     }
 
     override fun getItemCount(): Int = tasks.size
@@ -49,10 +42,10 @@ class TaskAdapter(private val database: AppDatabase) : RecyclerView.Adapter<Task
         holder.bind(tasks[position])
     }
 
-    fun remove(position: Int){
+    fun deactivateTask(position: Int){
         if (position !in tasks.indices) return
         val task = tasks.removeAt(position)
-        thread { database.records.update(task.id) }
+        thread { database.records.changeStatusOnCompleted(task.id) }
         notifyItemRemoved(position)
     }
 
@@ -64,7 +57,7 @@ class TaskAdapter(private val database: AppDatabase) : RecyclerView.Adapter<Task
         val currentDateTime = LocalDate.now().toString()
         val data = database.records.getAll().map { it.toTaskModel() }.sortedBy { it.deadline }
         filteredData = data.filter { it.deadline >= currentDateTime && it.status == "nowe" }.toMutableList()
-        notifyChanges(filteredData)
+        notifyChanges(data)
     }
 
     private fun notifyChanges(newData: List<Task>){

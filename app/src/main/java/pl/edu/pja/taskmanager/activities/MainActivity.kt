@@ -1,9 +1,10 @@
 package pl.edu.pja.taskmanager.activities
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoField
 import java.util.*
-import kotlin.concurrent.thread
 
 private const val REQUEST_NEW_TASK = 1
 private const val REQUEST_VIEW_TASK = 2
@@ -46,18 +46,29 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("id", task.id)
                     intent.putExtra("name", task.name)
                     intent.putExtra("priority", task.priority)
-                    intent.putExtra("progression", task.progression)
+                    intent.putExtra("progression", task.progression.toString())
                     intent.putExtra("deadline", task.deadline)
+                    intent.putExtra("time", task.time.toString())
                     intent.putExtra("status", task.status)
                     startActivityForResult(
                         intent, REQUEST_VIEW_TASK
                     )
                 }
-            })
 
-            taskAdapter.setOnItemLongClickListner(object: TaskAdapter.onClickLongListener{
                 override fun onItemLongClick(position: Int) {
-                    Log.i("TAG", "test")
+                    val positiveButtonClick = {
+                            dialog: DialogInterface, which: Int -> removeTask(position)
+                    }
+                    val negativeButtonClick = {
+                            dialog: DialogInterface, which: Int -> dialog.dismiss()
+                    }
+
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                    builder.setTitle("Zakończ zadanie")
+                    builder.setMessage("Czy zakończyć zadanie?")
+                    builder.setPositiveButton("TAK", DialogInterface.OnClickListener(positiveButtonClick))
+                    builder.setNegativeButton("NIE", DialogInterface.OnClickListener(negativeButtonClick))
+                    builder.show()
                 }
             })
 
@@ -66,6 +77,14 @@ class MainActivity : AppCompatActivity() {
             addItemDecoration(itemDecoration)
         }
         taskAdapter.reload()
+    }
+
+    private fun removeTask(position: Int){
+        taskAdapter.deactivateTask(position)
+        finish()
+        overridePendingTransition(0,0)
+        startActivity(intent)
+        overridePendingTransition(0,0)
     }
 
     private fun setupAddButton(){
@@ -81,12 +100,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupCurrentCountTask(){
+        binding.countTask.text = getCurrentCountTask().toString()
+    }
+
+    fun getCurrentCountTask(): Int {
         val firstOfWeek = LocalDate.now().toString()
         val lastOfWeek = LocalDateTime.now().with(ChronoField.DAY_OF_WEEK , 7).toLocalDate().toString()
-        thread {
-            binding.countTask.text =
-                database.records.getAllFromRange(firstOfWeek, lastOfWeek).size.toString()
-        }
+        return database.records.getAllFromRange(firstOfWeek, lastOfWeek).size
     }
 
     private fun getActualWeek() : Int{
@@ -94,8 +114,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_NEW_TASK && resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             taskAdapter.reload()
+            setupCurrentCountTask()
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

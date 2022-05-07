@@ -6,5 +6,6 @@ data class Task(
     val priority: String,
     val progression: Int,
     val deadline: String,
+    val time: Int,
     val status: String
 )

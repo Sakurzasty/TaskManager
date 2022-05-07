@@ -12,9 +12,10 @@ data class TaskDTO(
     val priority: String,
     val progression: Int,
     val deadline: String,
+    val time: Int,
     val status: String
 ) {
     fun toTaskModel(): Task {
-        return Task(id, name, priority, progression, deadline, status)
+        return Task(id, name, priority, progression, deadline, time, status)
     }
 }

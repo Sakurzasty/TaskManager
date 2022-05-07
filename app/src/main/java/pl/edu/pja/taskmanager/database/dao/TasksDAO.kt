@@ -3,6 +3,7 @@ package pl.edu.pja.taskmanager.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import pl.edu.pja.taskmanager.model.dto.TaskDTO
 
 @Dao
@@ -12,7 +13,11 @@ interface TasksDAO {
     fun add(taskDTO: TaskDTO)
 
     @Query("UPDATE taskdto SET status = 'completed' where id = :taskId")
-    fun update(taskId: Long)
+    fun changeStatusOnCompleted(taskId: Long)
+
+    //za cholerę nie wiem czemu nie działa adnotacja UPDATE, a działa komenda SQL...
+    @Query("UPDATE taskdto SET progression = :progression where id = :taskId")
+    fun updateProgress(taskId: Long, progression: Int)
 
     @Query("SELECT * from taskdto")
     fun getAll(): List<TaskDTO>

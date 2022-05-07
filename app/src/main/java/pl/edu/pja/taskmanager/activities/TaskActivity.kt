@@ -32,6 +32,7 @@ class TaskActivity : AppCompatActivity() {
                 binding.priority.selectedItem.toString(),
                 Integer.parseInt(binding.progress.text.toString()),
                 binding.deadline.text.toString(),
+                Integer.parseInt(binding.time.text.toString()),
                 "nowe"
             )
             thread {

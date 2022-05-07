@@ -4,14 +4,14 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pja.taskmanager.databinding.ItemBinding
 import pl.edu.pja.taskmanager.model.Task
 
-class TaskViewHolder(private val layoutBinding: ItemBinding, clickListener: TaskAdapter.onClickListener, clickLongListener: TaskAdapter.onClickLongListener) : RecyclerView.ViewHolder(layoutBinding.root){
+class TaskViewHolder(private val layoutBinding: ItemBinding, clickListener: TaskAdapter.onClickListener) : RecyclerView.ViewHolder(layoutBinding.root){
 
     init {
         itemView.setOnClickListener {
             clickListener.onItemClick(adapterPosition)
         }
         itemView.setOnLongClickListener{
-            clickLongListener.onItemLongClick(adapterPosition)
+            clickListener.onItemLongClick(adapterPosition)
             true
         }
     }
