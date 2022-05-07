@@ -29,7 +29,7 @@ class TaskView : AppCompatActivity() {
     private fun setupSaveButton(){
         binding.buttonSave.setOnClickListener{
             thread {
-                database.records.updateProgress(intent.getLongExtra("id", -1), 10)
+                database.records.updateProgress(intent.getLongExtra("id", -1), binding.seekBar.progress)
                 setResult(Activity.RESULT_OK)
                 finish()
             }

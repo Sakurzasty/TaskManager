@@ -15,7 +15,6 @@ interface TasksDAO {
     @Query("UPDATE taskdto SET status = 'completed' where id = :taskId")
     fun changeStatusOnCompleted(taskId: Long)
 
-    //za cholerę nie wiem czemu nie działa adnotacja UPDATE, a działa komenda SQL...
     @Query("UPDATE taskdto SET progression = :progression where id = :taskId")
     fun updateProgress(taskId: Long, progression: Int)
 

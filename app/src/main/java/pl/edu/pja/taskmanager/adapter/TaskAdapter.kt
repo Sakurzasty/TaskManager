@@ -57,7 +57,7 @@ class TaskAdapter(private val database: AppDatabase) : RecyclerView.Adapter<Task
         val currentDateTime = LocalDate.now().toString()
         val data = database.records.getAll().map { it.toTaskModel() }.sortedBy { it.deadline }
         filteredData = data.filter { it.deadline >= currentDateTime && it.status == "nowe" }.toMutableList()
-        notifyChanges(data)
+        notifyChanges(filteredData)
     }
 
     private fun notifyChanges(newData: List<Task>){

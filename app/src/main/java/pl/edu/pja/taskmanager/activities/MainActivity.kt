@@ -17,8 +17,7 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoField
 import java.util.*
 
-private const val REQUEST_NEW_TASK = 1
-private const val REQUEST_VIEW_TASK = 2
+private const val REQUEST_TASK = 1
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("time", task.time.toString())
                     intent.putExtra("status", task.status)
                     startActivityForResult(
-                        intent, REQUEST_VIEW_TASK
+                        intent, REQUEST_TASK
                     )
                 }
 
@@ -90,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupAddButton(){
         binding.addButton.setOnClickListener{
             startActivityForResult(
-                Intent(this, TaskActivity::class.java), REQUEST_NEW_TASK
+                Intent(this, TaskActivity::class.java), REQUEST_TASK
             )
         }
     }

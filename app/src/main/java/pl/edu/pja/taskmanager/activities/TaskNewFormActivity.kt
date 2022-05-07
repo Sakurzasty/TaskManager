@@ -2,6 +2,7 @@ package pl.edu.pja.taskmanager.activities
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import pl.edu.pja.taskmanager.App
@@ -17,6 +18,10 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupSaveButton()
+        setupSeekBar()
+        //bo się gliczuje przy refreshowaniu...
+        binding.textViewProgress.text = "0%"
+        binding.progressBar.progress = 0
     }
 
     private fun setupSaveButton(){
@@ -30,7 +35,7 @@ class TaskActivity : AppCompatActivity() {
                 0,
                 binding.name.text.toString(),
                 binding.priority.selectedItem.toString(),
-                Integer.parseInt(binding.progress.text.toString()),
+                binding.seekBar.progress,
                 binding.deadline.text.toString(),
                 Integer.parseInt(binding.time.text.toString()),
                 "nowe"
@@ -50,14 +55,27 @@ class TaskActivity : AppCompatActivity() {
         if (binding.deadline.text.toString().trim().length === 0){
             return true
         }
-        if (binding.progress.text.toString().trim().length === 0){
-            return true
-        }
         if (binding.time.text.toString().trim().length === 0){
             return true
         }
 
         return false
     }
+
+    private fun setupSeekBar(){
+        binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                binding.progressBar.progress = binding.seekBar.progress
+                binding.textViewProgress.text = binding.seekBar.progress.toString() + "%"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+            }
+        })
+    }
+
 
 }
