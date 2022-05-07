@@ -10,7 +10,7 @@ import pl.edu.pja.taskmanager.databinding.ActivityAddTaskBinding
 import pl.edu.pja.taskmanager.model.dto.TaskDTO
 import kotlin.concurrent.thread
 
-class TaskActivity : AppCompatActivity() {
+class TaskNewFormActivity : AppCompatActivity() {
     private val database by lazy {(application as App).database}
     private val binding by lazy {ActivityAddTaskBinding.inflate(layoutInflater)}
 
@@ -19,9 +19,6 @@ class TaskActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupSaveButton()
         setupSeekBar()
-        //bo się gliczuje przy refreshowaniu...
-        binding.textViewProgress.text = "0%"
-        binding.progressBar.progress = 0
     }
 
     private fun setupSaveButton(){

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             taskAdapter.setOnItemClickListener(object: TaskAdapter.onClickListener{
                 override fun onItemClick(position: Int) {
                     val task = taskAdapter.getTask(position)
-                    val intent = Intent(context, TaskView::class.java)
+                    val intent = Intent(context, TaskSummaryActivity::class.java)
                     intent.putExtra("id", task.id)
                     intent.putExtra("name", task.name)
                     intent.putExtra("priority", task.priority)
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupAddButton(){
         binding.addButton.setOnClickListener{
             startActivityForResult(
-                Intent(this, TaskActivity::class.java), REQUEST_TASK
+                Intent(this, TaskNewFormActivity::class.java), REQUEST_TASK
             )
         }
     }
