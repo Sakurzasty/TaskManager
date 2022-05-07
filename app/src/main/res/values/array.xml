@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="spinnerItems">
+        <item>wysoki</item>
+        <item>średni</item>
+        <item>niski</item>
+    </string-array>
+</resources>
