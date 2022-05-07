@@ -2,12 +2,10 @@ package pl.edu.pja.taskmanager.activities
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import pl.edu.pja.taskmanager.App
 import pl.edu.pja.taskmanager.databinding.ActivitySummaryTaskBinding
-import pl.edu.pja.taskmanager.model.dto.TaskDTO
 import kotlin.concurrent.thread
 
 class TaskView : AppCompatActivity() {
@@ -18,34 +16,39 @@ class TaskView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupSaveButton()
+        setupSeekBar()
         binding.name.setText(intent.getStringExtra("name"))
         binding.priority.setText(intent.getStringExtra("priority"))
-        binding.progress.setText(intent.getStringExtra("progression"))
         binding.deadline.setText(intent.getStringExtra("deadline"))
+        binding.seekBar.progress = intent.getIntExtra("progression", 0)
+        binding.progressBar.progress = intent.getIntExtra("progression", 0)
+        binding.textViewProgress.text = intent.getIntExtra("progression", 0).toString() + "%"
         binding.time.setText(intent.getStringExtra("time"))
     }
 
     private fun setupSaveButton(){
         binding.buttonSave.setOnClickListener{
-            if (check()){
-                Toast.makeText(applicationContext, "Postęp nie może być pusty!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
             thread {
-                database.records.updateProgress(intent.getLongExtra("id", -1), Integer.parseInt(binding.progress.text.toString()))
+                database.records.updateProgress(intent.getLongExtra("id", -1), 10)
                 setResult(Activity.RESULT_OK)
                 finish()
             }
         }
     }
 
-    private fun check(): Boolean {
-        if (binding.progress.text.toString().trim().length === 0){
-            return true
-        }
+    private fun setupSeekBar(){
+        binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                binding.progressBar.progress = binding.seekBar.progress
+                binding.textViewProgress.text = binding.seekBar.progress.toString() + "%"
+            }
 
-        return false
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+            }
+        })
     }
 
 }

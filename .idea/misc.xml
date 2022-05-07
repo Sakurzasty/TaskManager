@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/BitBucket/Android/TaskManager/app/src/main/res/drawable/bg_spinner.xml" value="0.1315" />
+        <entry key="..\:/BitBucket/Android/TaskManager/app/src/main/res/drawable/circle.xml" value="0.339" />
         <entry key="..\:/BitBucket/Android/TaskManager/app/src/main/res/drawable/divider.xml" value="0.1315" />
         <entry key="..\:/BitBucket/Android/TaskManager/app/src/main/res/layout/activity_add_task.xml" value="0.33" />
         <entry key="..\:/BitBucket/Android/TaskManager/app/src/main/res/layout/activity_main.xml" value="0.32" />

@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("id", task.id)
                     intent.putExtra("name", task.name)
                     intent.putExtra("priority", task.priority)
-                    intent.putExtra("progression", task.progression.toString())
+                    intent.putExtra("progression", task.progression)
                     intent.putExtra("deadline", task.deadline)
                     intent.putExtra("time", task.time.toString())
                     intent.putExtra("status", task.status)
