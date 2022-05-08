@@ -10,7 +10,7 @@ import pl.edu.pja.taskmanager.databinding.ActivityAddTaskBinding
 import pl.edu.pja.taskmanager.model.dto.TaskDTO
 import kotlin.concurrent.thread
 
-class TaskNewFormActivity : AppCompatActivity() {
+class TaskEditFormActivity : AppCompatActivity() {
     private val database by lazy {(application as App).database}
     private val binding by lazy {ActivityAddTaskBinding.inflate(layoutInflater)}
 
@@ -19,6 +19,17 @@ class TaskNewFormActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupSaveButton()
         setupSeekBar()
+        binding.name.setText(intent.getStringExtra("name"))
+        when (intent.getStringExtra("priority")){
+            "wysoki" -> binding.priority.setSelection(0)
+            "średni" -> binding.priority.setSelection(1)
+            else -> {binding.priority.setSelection(2)}
+        }
+        binding.deadline.setText(intent.getStringExtra("deadline"))
+        binding.seekBar.progress = intent.getIntExtra("progression", 0)
+        binding.progressBar.progress = intent.getIntExtra("progression", 0)
+        binding.textViewProgress.text = intent.getIntExtra("progression", 0).toString() + "%"
+        binding.time.setText(intent.getStringExtra("time"))
     }
 
     private fun setupSaveButton(){
@@ -29,20 +40,20 @@ class TaskNewFormActivity : AppCompatActivity() {
             }
 
             val task = TaskDTO(
-                0,
+                intent.getLongExtra("id", -1),
                 binding.name.text.toString(),
                 binding.priority.selectedItem.toString(),
                 binding.seekBar.progress,
                 binding.deadline.text.toString(),
                 Integer.parseInt(binding.time.text.toString()),
-                "nowe"
+                intent.getStringExtra("status").toString()
             )
             thread {
-                database.records.add(task)
+                database.records.update(task)
                 setResult(Activity.RESULT_OK)
                 finish()
             }
-            Toast.makeText(applicationContext, "Dodano nowe zadanie do listy", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Zaktualizowano dane rekordu", Toast.LENGTH_SHORT).show()
         }
     }
 

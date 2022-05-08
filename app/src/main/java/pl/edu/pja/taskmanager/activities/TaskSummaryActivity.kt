@@ -4,6 +4,7 @@ import android.Manifest.permission.SEND_SMS
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.SmsManager
@@ -18,16 +19,19 @@ import pl.edu.pja.taskmanager.App
 import pl.edu.pja.taskmanager.databinding.ActivitySummaryTaskBinding
 import kotlin.concurrent.thread
 
+private const val REQUEST_TASK = 1
+private const val PERMISSION_REQUEST = 101
+
 class TaskSummaryActivity : AppCompatActivity() {
     private val database by lazy {(application as App).database}
     private val binding by lazy {ActivitySummaryTaskBinding.inflate(layoutInflater)}
-    private val PERMISSION_REQUEST = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupSaveButton()
         setupMessageButton()
+        setupEditButton()
         setupSeekBar()
         binding.name.setText(intent.getStringExtra("name"))
         binding.priority.setText(intent.getStringExtra("priority"))
@@ -45,6 +49,24 @@ class TaskSummaryActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_OK)
                 finish()
             }
+            Toast.makeText(applicationContext, "Zapisano postęp", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupEditButton(){
+        binding.buttonEdit.setOnClickListener{
+            val intentEdit = Intent(applicationContext, TaskEditFormActivity::class.java)
+            intentEdit.putExtra("id", intent.getLongExtra("id", -1))
+            intentEdit.putExtra("name", intent.getStringExtra("name"))
+            intentEdit.putExtra("priority", intent.getStringExtra("priority"))
+            intentEdit.putExtra("progression", intent.getIntExtra("progression", 0))
+            intentEdit.putExtra("deadline", intent.getStringExtra("deadline"))
+            intentEdit.putExtra("time", intent.getStringExtra("time"))
+            intentEdit.putExtra("status", intent.getStringExtra("status"))
+            startActivityForResult(
+                intentEdit, REQUEST_TASK
+            )
+            finish()
         }
     }
 

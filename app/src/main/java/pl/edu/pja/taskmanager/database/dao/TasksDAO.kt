@@ -12,6 +12,9 @@ interface TasksDAO {
     @Insert()
     fun add(taskDTO: TaskDTO)
 
+    @Update()
+    fun update(taskDTO: TaskDTO)
+
     @Query("UPDATE taskdto SET status = 'completed' where id = :taskId")
     fun changeStatusOnCompleted(taskId: Long)
 

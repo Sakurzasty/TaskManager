@@ -113,10 +113,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            taskAdapter.reload()
-            setupCurrentCountTask()
-        }
+        taskAdapter.reload()
+        setupCurrentCountTask()
         super.onActivityResult(requestCode, resultCode, data)
     }
 

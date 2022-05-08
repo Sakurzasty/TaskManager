@@ -26,6 +26,9 @@
         <activity
             android:name=".activities.TaskSummaryActivity"
             android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.TaskEditFormActivity"
+            android:parentActivityName=".activities.MainActivity" />
     </application>
 
 </manifest>
