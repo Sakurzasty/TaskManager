@@ -1,6 +1,5 @@
 package pl.edu.pja.taskmanager.activities
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -12,6 +11,7 @@ import pl.edu.pja.taskmanager.App
 import pl.edu.pja.taskmanager.R
 import pl.edu.pja.taskmanager.adapter.TaskAdapter
 import pl.edu.pja.taskmanager.databinding.ActivityMainBinding
+import pl.edu.pja.taskmanager.model.dto.TaskDTO
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoField
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setupAddButton()
         setupWeek()
         setupCurrentCountTask()
+        setupPreparedData()
     }
 
     private fun setupTaskList(){
@@ -102,10 +103,29 @@ class MainActivity : AppCompatActivity() {
         binding.countTask.text = getCurrentCountTask().toString()
     }
 
+    private fun setupPreparedData(){
+        if (getCurrentCountTask() == 0) {
+            val task = TaskDTO(
+                0,
+                "INIT TASK 01",
+                "wysoki",
+                50,
+                LocalDate.now().toString(),
+                20,
+                "nowe"
+            )
+            database.records.add(task)
+            finish()
+            overridePendingTransition(0,0)
+            startActivity(intent)
+            overridePendingTransition(0,0)
+        }
+    }
+
     fun getCurrentCountTask(): Int {
-        val firstOfWeek = LocalDate.now().toString()
+        val actualDayOfWeek = LocalDate.now().toString()
         val lastOfWeek = LocalDateTime.now().with(ChronoField.DAY_OF_WEEK , 7).toLocalDate().toString()
-        return database.records.getAllFromRange(firstOfWeek, lastOfWeek).size
+        return database.records.getAllFromRange(actualDayOfWeek, lastOfWeek).size
     }
 
     private fun getActualWeek() : Int{
